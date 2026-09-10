@@ -18,6 +18,9 @@ function windsorURL(fields, extra) {
   const params = new URLSearchParams({
     api_key: key,
     fields: fields.join(","),
+        account_id: ACCOUNT_ID, // scope every query to Herbera only — without this Windsor
+    // aggregates across every Meta account connected to this API key, which is far
+    // slower and can leak other accounts' numbers into the totals.
     ...extra,
   });
   return `${BASE}?${params.toString()}`;
