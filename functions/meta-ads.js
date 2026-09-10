@@ -372,7 +372,7 @@ exports.handler = async (event) => {
       insights: buildInsights(totals, allAudiences, { minSpend: AUDIENCE_MIN_SPEND, minPurchasesForScale: 3 }),
       campaignInsights: buildInsights(totals, campaigns, { minSpend: CAMPAIGN_MIN_SPEND, minPurchasesForScale: 3 }),
       leaderboards: buildLeaderboards(allAudiences, AUDIENCE_MIN_SPEND),
-      thresholds: { audienceMinSpend: eur(AUDIENCE_MIN_SPEND), adsMinSpend: eur(ADS_MIN_SPEND), campaignMinSpend: eur(CAMPAIGN_MIN_SPEND) },
+      thresholds: { audienceMinSpend: eur(AUDIENCE_MIN_SPEND), campaignMinSpend: eur(CAMPAIGN_MIN_SPEND) },
       trend,
     };
 
