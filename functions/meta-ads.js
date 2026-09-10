@@ -62,6 +62,7 @@ const num2 = (v) => new Intl.NumberFormat("es-ES", { maximumFractionDigits: 2 })
 function deriveTotals(row) {
   const spend = n(row.spend);
   const clicks = n(row.clicks);
+  const impressions = n(row.impressions);
   const revenue = n(row.action_values_purchase);
   const purchases = n(row.actions_purchase);
   const visits = n(row.actions_landing_page_view);
@@ -76,10 +77,12 @@ function deriveTotals(row) {
     carts,
     checkouts,
     frequency: n(row.frequency),
+    impressions,
     roas: safeDiv(revenue, spend),
     aov: safeDiv(revenue, purchases),
     cpa: safeDiv(spend, purchases),
     cpc: safeDiv(spend, clicks),
+    cpm: safeDiv(spend, impressions) * 1000,
     ctr: n(row.ctr),
     costPerVisit: safeDiv(spend, visits),
     costPerCart: safeDiv(spend, carts),
@@ -93,7 +96,7 @@ function deriveTotals(row) {
 
 const fmt = (d) => ({
   spend: eur(d.spend), revenue: eur(d.revenue), roas: x(d.roas), aov: eur(d.aov), cpa: eur(d.cpa),
-  cpc: eur(d.cpc), ctr: pct(d.ctr), costPerVisit: eur(d.costPerVisit), costPerCart: eur(d.costPerCart),
+  cpc: eur(d.cpc), cpm: eur(d.cpm), ctr: pct(d.ctr), costPerVisit: eur(d.costPerVisit), costPerCart: eur(d.costPerCart),
   costPerCheckout: eur(d.costPerCheckout), clickToVisit: pct(d.clickToVisit), clickToCart: pct(d.clickToCart),
   clickToCheckout: pct(d.clickToCheckout), clickToPurchase: pct(d.clickToPurchase),
   clicks: int(d.clicks), visits: int(d.visits), carts: int(d.carts), checkouts: int(d.checkouts),
