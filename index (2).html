@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informe Meta Ads — Herbera</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap');
+
+  :root{
+    --bg:            #0a0a0a;
+    --surface:       #141414;
+    --surface-raise: #1c1c1c;
+    --ink:           #ffffff;
+    --ink-soft:      #b3b0a8;
+    --ink-faint:     #7a776f;
+    --line:          #262622;
+    --line-strong:   #3a3733;
+    --gold:          #c8a96e;
+    --gold-tint:     #2c2415;
+    --rust:          #c0665a;
+    --rust-tint:     #2b1a17;
+    --chart-surface: #141414;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:            #0a0a0a;
+      --surface:       #141414;
+      --surface-raise: #1c1c1c;
+      --ink:           #ffffff;
+      --ink-soft:      #b3b0a8;
+      --ink-faint:     #7a776f;
+      --line:          #262622;
+      --line-strong:   #3a3733;
+      --gold:          #c8a96e;
+      --gold-tint:     #2c2415;
+      --rust:          #c0665a;
+      --rust-tint:     #2b1a17;
+      --chart-surface: #141414;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:            #0a0a0a;
+    --surface:       #141414;
+    --surface-raise: #1c1c1c;
+    --ink:           #ffffff;
+    --ink-soft:      #b3b0a8;
+    --ink-faint:     #7a776f;
+    --line:          #262622;
+    --line-strong:   #3a3733;
+    --gold:          #c8a96e;
+    --gold-tint:     #2c2415;
+    --rust:          #c0665a;
+    --rust-tint:     #2b1a17;
+    --chart-surface: #141414;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Poppins", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  .num{ font-family:"Poppins", ui-sans-serif, system-ui, sans-serif; font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 40px 96px; }
+  h1,h2,h3{ font-weight:700; text-wrap:balance; margin:0; }
+
+  /* ---------- header ---------- */
+  header.masthead{
+    padding:56px 40px 40px;
+    border-bottom:1px solid var(--line-strong);
+  }
+  .masthead-inner{ max-width:1080px; margin:0 auto; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+  .masthead-top{ max-width:1080px; margin:0 auto 26px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+  .wordmark{ font-size:24px; font-weight:700; letter-spacing:0.02em; color:var(--ink); }
+  .wordmark .wordmark-reg{ font-size:13px; font-weight:400; vertical-align:top; color:var(--ink-faint); }
+  .pdf-btn{ font-family:"Poppins", sans-serif; font-size:11.5px; font-weight:600; letter-spacing:0.03em; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line-strong); border-radius:20px; padding:6px 14px; cursor:pointer; }
+  .pdf-btn:hover{ color:var(--ink); border-color:var(--ink-faint); }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-badge{ display:inline-flex; align-items:center; gap:8px; border:1px solid var(--gold); color:var(--gold); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; font-weight:600; padding:8px 16px; border-radius:2px; }
+  .brand-badge .sep{ color:var(--ink-faint); font-weight:400; }
+  .report-title{ text-align:right; }
+  .report-title h1{ font-size:30px; letter-spacing:-0.01em; }
+  .period-toggle{ display:inline-flex; gap:6px; margin-top:8px; }
+  .period-btn{ font-family:"Poppins", sans-serif; font-size:12px; font-weight:600; letter-spacing:0.01em; padding:5px 13px; border-radius:20px; border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-soft); cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+  .period-btn.active{ background:var(--gold); border-color:var(--gold); color:var(--surface); }
+  .report-title .meta{ font-size:12px; color:var(--ink-faint); margin-top:8px; }
+  .live-dot{ display:inline-block; width:7px; height:7px; border-radius:50%; background:currentColor; margin-right:6px; box-shadow:0 0 0 0 currentColor; animation:pulse 2s infinite; }
+  @media (prefers-reduced-motion: reduce){ .live-dot{ animation:none; } }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(193,133,42,0.55); }
+    70%{ box-shadow:0 0 0 6px rgba(193,133,42,0); }
+    100%{ box-shadow:0 0 0 0 rgba(193,133,42,0); }
+  }
+  .load-note{ font-size:12.5px; color:var(--ink-faint); padding:10px 0; }
+  .err-note{ font-size:12.5px; color:var(--rust); padding:10px 0; }
+
+  /* ---------- hero KPIs ---------- */
+  .hero-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-top:40px;
+  }
+  .hero-cell{
+    background:var(--surface);
+    padding:26px 24px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .hero-cell .label{ font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; color:var(--ink-faint); }
+  .hero-cell .value{ font-size:32px; font-weight:500; letter-spacing:-0.01em; }
+  .hero-cell .value.accent{ color:var(--gold); }
+  .hero-cell .sub{ font-size:12.5px; color:var(--ink-soft); }
+
+  /* month-over-month delta badges */
+  .delta-badge{ display:inline-flex; align-items:center; gap:3px; font-size:11px; font-weight:600; padding:2px 7px; border-radius:20px; white-space:nowrap; font-family:"Poppins", ui-sans-serif, sans-serif; }
+  .delta-badge:empty{ display:none; }
+  .delta-badge.pos{ background:var(--gold-tint); color:var(--gold); }
+  .delta-badge.neg{ background:var(--rust-tint); color:var(--rust); }
+  .delta-badge.neu{ background:var(--line); color:var(--ink-soft); }
+  .v-wrap{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .hero-cell .delta-row{ min-height:20px; }
+  .partial-note{ font-size:11.5px; color:var(--ink-faint); margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+
+  /* ---------- sections ---------- */
+  section{ margin-top:56px; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; border-bottom:1px solid var(--line-strong); padding-bottom:12px; margin-bottom:24px; }
+  .section-head .eyebrow{ font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); font-weight:600; }
+  .section-head h2{ font-size:22px; margin-top:4px; }
+  .section-head .note{ font-size:12.5px; color:var(--ink-faint); max-width:280px; text-align:right; }
+
+  /* funnel stage groups */
+  .stage-groups{ display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
+  .stage{
+    background:var(--surface); border:1px solid var(--line); border-radius:2px; padding:18px 16px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .stage .stage-title{ font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-faint); display:flex; justify-content:space-between; }
+  .stage .stage-title span.step{ color:var(--gold); font-weight:600; }
+  .stage .metric-row{ display:flex; justify-content:space-between; align-items:baseline; }
+  .stage .metric-row .k{ font-size:12.5px; color:var(--ink-soft); }
+  .stage .metric-row .v{ font-size:16px; font-weight:500; }
+  .stage hr{ border:none; border-top:1px solid var(--line); margin:2px 0; }
+
+  /* funnel svg */
+  .funnel-wrap{ background:var(--surface); border:1px solid var(--line); padding:28px 28px 20px; margin-top:20px; }
+  .funnel-wrap svg{ display:block; width:100%; height:auto; overflow:visible; }
+  .funnel-legend{ display:flex; gap:28px; margin-top:14px; flex-wrap:wrap; }
+  .funnel-legend .item{ font-size:12px; color:var(--ink-soft); display:flex; gap:8px; align-items:center;}
+  .funnel-legend .dot{ width:8px; height:8px; border-radius:1px; background:var(--gold); }
+
+  /* funnel bottleneck diagnosis */
+  .funnel-diagnosis{ margin-top:18px; padding:16px 18px; background:var(--rust-tint); border:1px solid var(--rust); border-radius:2px; display:none; gap:14px; align-items:flex-start; }
+  .funnel-diagnosis.show{ display:flex; }
+  .funnel-diagnosis .icon{ font-size:19px; line-height:1.1; flex:none; }
+  .funnel-diagnosis .body h4{ font-size:13.5px; margin:0 0 5px; color:var(--rust); font-weight:700; }
+  .funnel-diagnosis .body p{ font-size:12.5px; color:var(--ink-soft); margin:0; max-width:680px; }
+  .funnel-diagnosis .body p strong{ color:var(--ink); }
+
+  /* campaign chart */
+  .camp-chart{ display:flex; flex-direction:column; gap:18px; }
+  .camp-row{ display:grid; grid-template-columns:200px 1fr 84px; gap:16px; align-items:center; }
+  .camp-row .cname{ font-size:13.5px; font-weight:600; }
+  .camp-row .cobj{ font-size:11px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.04em; }
+  .camp-bars{ display:flex; flex-direction:column; gap:5px; }
+  .bar-track{ position:relative; height:13px; background:var(--line); border-radius:1px; overflow:hidden; }
+  .bar-fill{ position:absolute; left:0; top:0; bottom:0; border-radius:1px; }
+  .bar-fill.spend{ background:var(--rust); }
+  .bar-fill.rev{ background:var(--gold); }
+  .camp-roas{ text-align:right; }
+  .camp-roas .v{ font-size:18px; font-weight:600; }
+  .camp-roas .v.zero{ color:var(--ink-faint); }
+  .camp-roas .l{ font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.06em; }
+  .chart-legend{ display:flex; gap:24px; margin-bottom:6px; font-size:12px; color:var(--ink-soft); }
+  .chart-legend .item{ display:flex; align-items:center; gap:7px; }
+  .chart-legend .sw{ width:10px; height:10px; border-radius:1px; }
+  .chart-legend .sw.spend{ background:var(--rust); }
+  .chart-legend .sw.rev{ background:var(--gold); }
+
+  /* tables */
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  thead th{ text-align:left; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); font-weight:600; padding:0 10px 10px; border-bottom:1px solid var(--line-strong); }
+  thead th.num-col, tbody td.num-col{ text-align:right; }
+  tbody td{ padding:12px 10px; border-bottom:1px solid var(--line); }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody td.name{ font-weight:600; }
+  tbody td.sub{ color:var(--ink-faint); font-size:11.5px; display:block; font-weight:400; margin-top:2px; }
+  .table-scroll{ overflow-x:auto; }
+  .badge{ display:inline-block; padding:2px 8px; border-radius:2px; font-size:11px; font-weight:600; }
+  .badge.win{ background:var(--gold-tint); color:var(--gold); }
+  .badge.warn{ background:var(--rust-tint); color:var(--rust); }
+
+  /* automatic scale / pause insights */
+  .insight-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .insight-card{ background:var(--surface); border:1px solid var(--line); border-top-width:3px; padding:20px 22px; }
+  .insight-card.scale{ border-top-color:var(--gold); }
+  .insight-card.pause{ border-top-color:var(--rust); }
+  .insight-head{ display:flex; align-items:center; gap:9px; margin-bottom:4px; }
+  .insight-head .dot{ width:9px; height:9px; border-radius:50%; flex:none; }
+  .insight-card.scale .dot{ background:var(--gold); }
+  .insight-card.pause .dot{ background:var(--rust); }
+  .insight-head h3{ font-size:13.5px; font-weight:700; letter-spacing:0.02em; text-transform:uppercase; }
+  .insight-card.scale h3{ color:var(--gold); }
+  .insight-card.pause h3{ color:var(--rust); }
+  .insight-sub{ font-size:12px; color:var(--ink-faint); margin-bottom:16px; }
+  .insight-list{ display:flex; flex-direction:column; }
+  .insight-item{ padding:12px 0; border-bottom:1px solid var(--line); }
+  .insight-item:last-child{ border-bottom:none; }
+  .insight-item .iname{ font-size:13px; font-weight:600; margin-bottom:3px; }
+  .insight-item .icamp{ font-size:11px; color:var(--ink-faint); }
+  .insight-item .idetail{ font-size:12px; color:var(--ink-soft); margin-top:4px; }
+  .insight-item .idetail strong{ color:var(--ink); }
+  .insight-empty{ font-size:12.5px; color:var(--ink-faint); padding:8px 0 4px; }
+
+  /* compact variant of the insight cards, used for the campaign-level diagnosis */
+  .insight-card.compact{ padding:16px 18px; }
+  .insight-card.compact .insight-sub{ margin-bottom:10px; }
+  .insight-card.compact .insight-item{ padding:9px 0; }
+
+  /* monthly trend */
+  .trend-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .trend-card{ background:var(--surface); border:1px solid var(--line); padding:18px 20px 14px; }
+  .trend-card h4{ font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+  .trend-card svg{ display:block; width:100%; height:auto; overflow:visible; }
+  .trend-note{ font-size:12px; color:var(--ink-faint); margin-top:16px; padding:12px 14px; background:var(--gold-tint); border-radius:2px; }
+  .trend-note strong{ color:var(--ink); }
+  .trend-table{ margin-top:20px; }
+
+  /* leaderboards */
+  .leaderboard-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:28px; }
+  .leaderboard-card{ background:var(--surface); border:1px solid var(--line); padding:18px 20px; }
+  .leaderboard-card h4{ font-size:11.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--gold); margin-bottom:2px; }
+  .leaderboard-card .lb-sub{ font-size:11px; color:var(--ink-faint); margin-bottom:12px; }
+  .lb-item{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); }
+  .lb-item:last-child{ border-bottom:none; }
+  .lb-item .lb-rank{ font-size:11px; color:var(--ink-faint); font-weight:600; flex:none; width:16px; }
+  .lb-item .lb-name{ font-size:12.5px; font-weight:600; flex:1; min-width:0; }
+  .lb-item .lb-name .lb-camp{ display:block; font-size:10.5px; color:var(--ink-faint); font-weight:400; margin-top:1px; }
+  .lb-item .lb-value{ font-size:13.5px; font-weight:700; color:var(--gold); flex:none; }
+
+  /* print (PDF export via browser print) */
+  @media print{
+    .pdf-btn, .period-toggle, .live-dot{ display:none !important; }
+    body{ background:#fff; color:#1d1d1b; }
+    a[href]:after{ content:""; }
+    section{ break-inside:avoid; }
+    .wrap{ padding:0 8px 24px; }
+    header.masthead{ padding:16px 8px; }
+  }
+
+  /* ad cards */
+  .ad-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .ad-card{ background:var(--surface); border:1px solid var(--line); padding:18px; display:flex; flex-direction:column; gap:14px; }
+  .ad-card .athumb-wrap{ width:100%; aspect-ratio:1/1; border-radius:2px; background:var(--line); overflow:hidden; }
+  .ad-card .athumb{ width:100%; height:100%; object-fit:cover; display:block; }
+  .ad-card .rank{ font-size:11px; color:var(--gold); font-weight:700; letter-spacing:0.06em; }
+  .ad-card .aname{ font-size:14.5px; font-weight:600; line-height:1.3; min-height:38px; }
+  .ad-card .aset{ font-size:11.5px; color:var(--ink-faint); }
+  .ad-card .amet{ display:flex; flex-direction:column; gap:6px; margin-top:auto; padding-top:12px; border-top:1px solid var(--line); }
+  .ad-card .amet .row{ display:flex; justify-content:space-between; font-size:12.5px; }
+  .ad-card .amet .row .k{ color:var(--ink-soft); }
+  .ad-card .amet .row .v{ font-weight:500; }
+  .ad-card .amet .row .v.hi{ color:var(--gold); font-weight:600; }
+
+  /* top-10 creative mini cards */
+  .ad-mini-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:20px; }
+  .ad-mini-card{ background:var(--surface); border:1px solid var(--line); padding:10px; display:flex; flex-direction:column; gap:8px; }
+  .ad-mini-card .mthumb-wrap{ width:100%; aspect-ratio:1/1; border-radius:2px; background:var(--line); overflow:hidden; }
+  .ad-mini-card .mthumb{ width:100%; height:100%; object-fit:cover; display:block; }
+  .ad-mini-card .mrank{ font-size:10px; color:var(--gold); font-weight:700; letter-spacing:0.05em; }
+  .ad-mini-card .mname{ font-size:11.5px; font-weight:600; line-height:1.3; min-height:29px; }
+  .ad-mini-card .mmet{ display:flex; justify-content:space-between; font-size:11px; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:6px; }
+  .ad-mini-card .mmet .v{ font-weight:600; color:var(--ink); }
+
+  /* full creatives table */
+  .table-scroll{ overflow-x:auto; margin-top:28px; }
+  .creatives-table{ min-width:980px; }
+  .creatives-table thead th{ white-space:nowrap; }
+  .creatives-table .cname-cell{ display:flex; align-items:center; gap:10px; }
+  .creatives-table .cthumb{ width:34px; height:34px; border-radius:2px; object-fit:cover; flex:none; background:var(--line); }
+  .creatives-table .cthumb-empty{ width:34px; height:34px; border-radius:2px; background:var(--line); flex:none; }
+  .creatives-table .cname{ font-weight:600; font-size:13px; }
+  .creatives-table .cset{ font-size:11px; color:var(--ink-faint); margin-top:1px; }
+
+  /* recommendations */
+  .reco-list{ display:flex; flex-direction:column; }
+  .reco{ display:grid; grid-template-columns:40px 1fr; gap:18px; padding:20px 0; border-bottom:1px solid var(--line); }
+  .reco:last-child{ border-bottom:none; }
+  .reco .idx{ font-family:"Poppins", sans-serif; font-size:20px; color:var(--gold); font-weight:500; }
+  .reco h3{ font-size:15.5px; margin-bottom:6px; }
+  .reco p{ font-size:13.5px; color:var(--ink-soft); margin:0; max-width:640px; }
+  .reco .tag{ display:inline-block; margin-top:8px; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); }
+
+  footer{ margin-top:64px; padding-top:24px; border-top:1px solid var(--line-strong); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:11.5px; color:var(--ink-faint); }
+
+  @media (max-width:760px){
+    .wrap, .masthead-inner{ padding-left:20px; padding-right:20px; }
+    header.masthead{ padding-left:20px; padding-right:20px; }
+    .hero-grid{ grid-template-columns:repeat(2,1fr); }
+    .stage-groups{ grid-template-columns:repeat(2,1fr); }
+    .ad-grid{ grid-template-columns:repeat(2,1fr); }
+    .ad-mini-grid{ grid-template-columns:repeat(3,1fr); }
+    .insight-grid{ grid-template-columns:1fr; }
+    .trend-grid{ grid-template-columns:1fr; }
+    .leaderboard-grid{ grid-template-columns:1fr; }
+    .camp-row{ grid-template-columns:1fr; }
+    .camp-roas{ text-align:left; }
+    .report-title{ text-align:left; }
+    .masthead-inner{ flex-direction:column; align-items:flex-start; }
+    .masthead-top{ padding-left:20px; padding-right:20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <div class="wordmark">HĒRBERA<span class="wordmark-reg">®</span></div>
+    <button class="pdf-btn" id="pdf-btn" type="button" onclick="window.print()">Descargar PDF</button>
+  </div>
+  <div class="masthead-inner">
+    <div class="brand">
+      <div class="brand-badge">Informe Meta Ads<span class="sep">·</span>David González Pizarro — Consultor Ecommerce</div>
+    </div>
+    <div class="report-title">
+      <h1>Dashboard en vivo · Meta Ads</h1>
+      <div class="period-toggle" role="group" aria-label="Periodo del informe">
+        <button class="period-btn active" id="period-current" type="button"><span class="live-dot" id="live-dot" aria-hidden="true"></span>Mes en curso</button>
+        <button class="period-btn" id="period-last-complete" type="button">Mes anterior completo</button>
+      </div>
+      <div class="meta">Cuenta: Herbera Cosmetics® · Actualizado: <span id="last-updated">cargando…</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO KPIs -->
+  <div class="hero-grid">
+    <div class="hero-cell">
+      <div class="label">Facturación</div>
+      <div class="value accent num" id="kpi-revenue">—</div>
+      <div class="delta-row"><span class="delta-badge" id="kpi-revenue-delta"></span></div>
+      <div class="sub">Ingresos atribuidos por Meta</div>
+    </div>
+    <div class="hero-cell">
+      <div class="label">Inversión publicitaria</div>
+      <div class="value num" id="kpi-spend">—</div>
+      <div class="delta-row"><span class="delta-badge" id="kpi-spend-delta"></span></div>
+      <div class="sub">Gasto del mes en curso</div>
+    </div>
+    <div class="hero-cell">
+      <div class="label">ROAS</div>
+      <div class="value accent num" id="kpi-roas">—</div>
+      <div class="delta-row"><span class="delta-badge" id="kpi-roas-delta"></span></div>
+      <div class="sub">Por cada 1&nbsp;€ invertido</div>
+    </div>
+    <div class="hero-cell">
+      <div class="label">AOV</div>
+      <div class="value num" id="kpi-aov">—</div>
+      <div class="delta-row"><span class="delta-badge" id="kpi-aov-delta"></span></div>
+      <div class="sub">Valor medio de pedido</div>
+    </div>
+  </div>
+  <div class="partial-note" id="partial-note" hidden></div>
+
+  <!-- FUNNEL METRICS -->
+  <section>
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Embudo de rendimiento</div>
+        <h2>Del clic a la compra</h2>
+      </div>
+      <div class="note" id="funnel-note">Cargando el embudo del periodo en curso…</div>
+    </div>
+
+    <div class="stage-groups">
+      <div class="stage">
+        <div class="stage-title"><span>Clics</span><span class="step">01</span></div>
+        <div class="metric-row"><span class="k">Nº de clics</span><span class="v-wrap"><span class="v num" id="m-clicks">—</span><span class="delta-badge" id="m-clicks-delta"></span></span></div>
+        <div class="metric-row"><span class="k">Coste por clic</span><span class="v-wrap"><span class="v num" id="m-cpc">—</span><span class="delta-badge" id="m-cpc-delta"></span></span></div>
+        <hr>
+        <div class="metric-row"><span class="k">Frecuencia</span><span class="v-wrap"><span class="v num" id="m-frequency">—</span><span class="delta-badge" id="m-frequency-delta"></span></span></div>
+      </div>
+      <div class="stage">
+        <div class="stage-title"><span>Visitas</span><span class="step">02</span></div>
+        <div class="metric-row"><span class="k">Visitas a la web</span><span class="v-wrap"><span class="v num" id="m-visits">—</span><span class="delta-badge" id="m-visits-delta"></span></span></div>
+        <div class="metric-row"><span class="k">Coste por visita</span><span class="v-wrap"><span class="v num" id="m-cost-visit">—</span><span class="delta-badge" id="m-cost-visit-delta"></span></span></div>
+        <hr>
+        <div class="metric-row"><span class="k">% clics → visitas</span><span class="v-wrap"><span class="v num" id="m-c2v">—</span><span class="delta-badge" id="m-c2v-delta"></span></span></div>
+      </div>
+      <div class="stage">
+        <div class="stage-title"><span>Carritos</span><span class="step">03</span></div>
+        <div class="metric-row"><span class="k">Carritos añadidos</span><span class="v-wrap"><span class="v num" id="m-carts">—</span><span class="delta-badge" id="m-carts-delta"></span></span></div>
+        <div class="metric-row"><span class="k">Coste por carrito</span><span class="v-wrap"><span class="v num" id="m-cost-cart">—</span><span class="delta-badge" id="m-cost-cart-delta"></span></span></div>
+        <hr>
+        <div class="metric-row"><span class="k">Conv. clics → carritos</span><span class="v-wrap"><span class="v num" id="m-c2cart">—</span><span class="delta-badge" id="m-c2cart-delta"></span></span></div>
+      </div>
+      <div class="stage">
+        <div class="stage-title"><span>Pagos iniciados</span><span class="step">04</span></div>
+        <div class="metric-row"><span class="k">Pagos iniciados</span><span class="v-wrap"><span class="v num" id="m-checkouts">—</span><span class="delta-badge" id="m-checkouts-delta"></span></span></div>
+        <div class="metric-row"><span class="k">Coste por pago iniciado</span><span class="v-wrap"><span class="v num" id="m-cost-checkout">—</span><span class="delta-badge" id="m-cost-checkout-delta"></span></span></div>
+        <hr>
+        <div class="metric-row"><span class="k">Conv. clics → pagos</span><span class="v-wrap"><span class="v num" id="m-c2checkout">—</span><span class="delta-badge" id="m-c2checkout-delta"></span></span></div>
+      </div>
+      <div class="stage">
+        <div class="stage-title"><span>Compras</span><span class="step">05</span></div>
+        <div class="metric-row"><span class="k">Compras</span><span class="v-wrap"><span class="v num" id="m-purchases">—</span><span class="delta-badge" id="m-purchases-delta"></span></span></div>
+        <div class="metric-row"><span class="k">Coste por compra (CPA)</span><span class="v-wrap"><span class="v num" id="m-cpa">—</span><span class="delta-badge" id="m-cpa-delta"></span></span></div>
+        <hr>
+        <div class="metric-row"><span class="k">Conv. clics → compras</span><span class="v-wrap"><span class="v num" id="m-c2purchase">—</span><span class="delta-badge" id="m-c2purchase-delta"></span></span></div>
+      </div>
+    </div>
+
+    <!-- funnel svg -->
+    <div class="funnel-wrap">
+      <svg viewBox="0 0 1000 200" role="img" aria-label="Embudo de clics a compras" id="funnel-svg">
+        <g class="num" font-family="Poppins, sans-serif" id="funnel-bars"></g>
+      </svg>
+      <div class="funnel-legend">
+        <div class="item"><span class="dot" style="background:var(--gold)"></span>Volumen por etapa (barra proporcional a clics)</div>
+        <div class="item"><span class="dot" style="background:var(--rust)"></span>Compras — conversión final</div>
+      </div>
+      <div class="funnel-diagnosis" id="funnel-diagnosis"></div>
+    </div>
+  </section>
+
+  <!-- AUTOMATIC INSIGHTS: scale / consider pausing -->
+  <section>
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Diagnóstico automático</div>
+        <h2>Audiencias a escalar y a revisar</h2>
+      </div>
+      <div class="note" id="insights-note">Generado a partir de los datos de este periodo · comparado contra el coste por compra medio de la cuenta.</div>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card scale">
+        <div class="insight-head"><span class="dot"></span><h3>Escalar</h3></div>
+        <div class="insight-sub" id="insight-scale-sub">Consistentemente eficientes, con volumen suficiente para confiar en el dato.</div>
+        <div class="insight-list" id="insight-scale-list"></div>
+      </div>
+      <div class="insight-card pause">
+        <div class="insight-head"><span class="dot"></span><h3>Considerar pausar</h3></div>
+        <div class="insight-sub" id="insight-pause-sub">Gasto significativo muy por encima del coste medio, o sin ninguna compra.</div>
+        <div class="insight-list" id="insight-pause-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MONTHLY TREND -->
+  <section>
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Tendencia mensual</div>
+        <h2>Evolución de CPC, CPA y ROAS</h2>
+      </div>
+      <div class="note">Últimos 3 meses, uno junto al otro para ver la trayectoria de la cuenta.</div>
+    </div>
+    <div class="trend-grid" id="trend-grid"></div>
+    <div class="trend-note">⚠️ Meta atribuye las compras dentro de una ventana de conversión posterior al clic o la visualización. El mes más reciente es <strong>provisional</strong> y sus cifras pueden seguir cambiando a medida que se atribuyen más compras.</div>
+    <div class="table-scroll trend-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th class="num-col">CPC</th>
+            <th class="num-col">CPA</th>
+            <th class="num-col">ROAS</th>
+          </tr>
+        </thead>
+        <tbody class="num" id="trend-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CAMPAIGNS -->
+  <section>
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Rendimiento por campaña</div>
+        <h2>Inversión, facturación y ROAS</h2>
+      </div>
+      <div class="note" id="campaigns-note">Cargando campañas activas del periodo…</div>
+    </div>
+
+    <div class="chart-legend">
+      <div class="item"><span class="sw spend"></span>Inversión</div>
+      <div class="item"><span class="sw rev"></span>Facturación</div>
+    </div>
+
+    <div class="camp-chart" id="camp-chart"></div>
+
+    <div class="table-scroll" style="margin-top:28px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Campaña</th>
+            <th class="num-col">Inversión</th>
+            <th class="num-col">Facturación</th>
+            <th class="num-col">Compras</th>
+            <th class="num-col">CPA</th>
+            <th class="num-col">AOV</th>
+            <th class="num-col">CTR</th>
+          </tr>
+        </thead>
+        <tbody class="num" id="camp-table-body"></tbody>
+      </table>
+    </div>
+
+    <div class="insight-grid" style="margin-top:28px;">
+      <div class="insight-card compact scale">
+        <div class="insight-head"><span class="dot"></span><h3>Campañas a escalar</h3></div>
+        <div class="insight-sub" id="camp-insight-scale-sub"></div>
+        <div class="insight-list" id="camp-insight-scale-list"></div>
+      </div>
+      <div class="insight-card compact pause">
+        <div class="insight-head"><span class="dot"></span><h3>Campañas a revisar</h3></div>
+        <div class="insight-sub" id="camp-insight-pause-sub"></div>
+        <div class="insight-list" id="camp-insight-pause-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCES -->
+  <section>
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Mejores audiencias</div>
+        <h2>Rankings por eficiencia</h2>
+      </div>
+      <div class="note" id="leaderboard-note">Sólo audiencias con inversión relevante.</div>
+    </div>
+    <div class="leaderboard-grid">
+      <div class="leaderboard-card">
+        <h4>Mejor CPA</h4>
+        <div class="lb-sub">Coste por compra más bajo</div>
+        <div id="lb-cpa"></div>
+      </div>
+      <div class="leaderboard-card">
+        <h4>Mejor ROAS</h4>
+        <div class="lb-sub">Retorno sobre inversión más alto</div>
+        <div id="lb-roas"></div>
+      </div>
+      <div class="leaderboard-card">
+        <h4>Mayor AOV</h4>
+        <div class="lb-sub">Valor medio de pedido más alto (mín. 3 compras)</div>
+        <div id="lb-aov"></div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:8px;">
+      <div>
+        <h2 style="font-size:16px;">Detalle completo</h2>
+      </div>
+      <div class="note" id="audiences-note">Ordenado por ROAS.</div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Audiencia (conjunto de anuncios)</th>
+            <th class="num-col">Inversión</th>
+            <th class="num-col">Compras</th>
+            <th class="num-col">Facturación</th>
+            <th class="num-col">ROAS</th>
+            <th class="num-col">CPA</th>
+          </tr>
+        </thead>
+        <tbody class="num" id="aud-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ADS / CREATIVES -->
+  <section>
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Creatividades</div>
+        <h2>Top 4 creatividades</h2>
+      </div>
+      <div class="note" id="ads-note">Ordenado por compras y facturación.</div>
+    </div>
+    <div class="ad-grid" id="ads-grid"></div>
+
+    <div class="section-head" style="margin-top:40px;">
+      <div>
+        <div class="eyebrow">Top 10</div>
+        <h2>Top 10 creatividades con imagen</h2>
+      </div>
+    </div>
+    <div class="ad-mini-grid" id="ads-mini-grid"></div>
+
+    <div class="section-head" style="margin-top:40px;">
+      <div>
+        <div class="eyebrow">Todas las creatividades</div>
+        <h2>Todas las creatividades testeadas este periodo</h2>
+      </div>
+      <div class="note" id="ads-table-note"></div>
+    </div>
+    <div class="table-scroll">
+      <table class="creatives-table">
+        <thead>
+          <tr>
+            <th>Creatividad</th>
+            <th class="num-col">Compras</th>
+            <th class="num-col">Facturación</th>
+            <th class="num-col">ROAS</th>
+            <th class="num-col">CTR</th>
+            <th class="num-col">Visitas</th>
+            <th class="num-col">Carritos</th>
+            <th class="num-col">Pagos iniciados</th>
+            <th class="num-col">Frecuencia</th>
+            <th class="num-col">CPM</th>
+            <th class="num-col">Inversión</th>
+          </tr>
+        </thead>
+        <tbody class="num" id="ads-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section>
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Diagnóstico y siguientes pasos</div>
+        <h2>Recomendaciones del último análisis</h2>
+      </div>
+      <div class="note">Basadas en el cierre de agosto 2026. Esta sección es de análisis manual — no se recalcula sola con los datos en vivo de arriba.</div>
+    </div>
+    <div class="reco-list">
+      <div class="reco">
+        <div class="idx">01</div>
+        <div>
+          <h3>Escalar presupuesto en las audiencias ganadoras</h3>
+          <p>«All Products» (catálogo dinámico, 6,07×), «UGC ia» (5,01×) y «TEST (1)» (5,09×) sostienen ROAS por encima de 5× con volumen suficiente para escalar con confianza. Subir presupuesto un 20–30&nbsp;% de forma progresiva y vigilar el CPA.</p>
+          <span class="tag">Prioridad alta · escalado</span>
+        </div>
+      </div>
+      <div class="reco">
+        <div class="idx">02</div>
+        <div>
+          <h3>Revisar la campaña F0 | 15% (objetivo Leads)</h3>
+          <p>Es la de mejor CTR de la cuenta (7,16&nbsp;%) y trajo 925 visitas, pero 0 compras con 311&nbsp;€ invertidos. El objetivo de campaña es «Leads», no «Ventas»: cambiar a un objetivo de conversión de compra y revisar que el cupón del 15&nbsp;% se aplique correctamente en el checkout.</p>
+          <span class="tag">Prioridad alta · corrección</span>
+        </div>
+      </div>
+      <div class="reco">
+        <div class="idx">03</div>
+        <div>
+          <h3>Activar retargeting de carrito y checkout abandonado</h3>
+          <p>Solo el 33&nbsp;% de quienes inician el pago llegan a comprar (118 de 355) y solo el 52&nbsp;% de quienes añaden al carrito inician el pago. Crear una campaña de retargeting de 14–30 días sobre «Add to Cart» e «Initiate Checkout», y revisar fricción en el checkout (gastos de envío, métodos de pago, formulario).</p>
+          <span class="tag">Prioridad alta · funnel</span>
+        </div>
+      </div>
+      <div class="reco">
+        <div class="idx">04</div>
+        <div>
+          <h3>Duplicar el anuncio «Video | UGC Bio Serum Vitamin C»</h3>
+          <p>Es el anuncio con mejor combinación de volumen y eficiencia del mes: 21 compras, 1.433&nbsp;€ de facturación y 5,55× ROAS. Duplicarlo en nuevas audiencias dentro de F1 | ABO y probarlo como base de una campaña Advantage+ independiente.</p>
+          <span class="tag">Prioridad media · creatividad</span>
+        </div>
+      </div>
+      <div class="reco">
+        <div class="idx">05</div>
+        <div>
+          <h3>Reasignar el presupuesto de FA | Alcance</h3>
+          <p>140&nbsp;€ invertidos con un CTR de 0,08&nbsp;% y 0 compras. Si su objetivo es notoriedad de marca, mantener con presupuesto reducido; si busca conversión, reasignar hacia las audiencias ganadoras del punto 1.</p>
+          <span class="tag">Prioridad media · presupuesto</span>
+        </div>
+      </div>
+      <div class="reco">
+        <div class="idx">06</div>
+        <div>
+          <h3>Probar bundles para elevar el AOV</h3>
+          <p>El AOV medio es de 67,92&nbsp;€ frente a un CPA de 20,24&nbsp;€: hay margen para incorporar packs o cross-sell en el checkout (p. ej. combinar Bio Serum + Polvos Bronceadores) y mejorar el margen por pedido sin tocar la inversión.</p>
+          <span class="tag">Prioridad media · AOV</span>
+        </div>
+      </div>
+      <div class="reco">
+        <div class="idx">07</div>
+        <div>
+          <h3>Pausar creatividades con ROAS por debajo de 1×</h3>
+          <p>La audiencia «UGC ia (1)» (0,45×) y anuncios sueltos como «Video | UGC BB Cream» (0,56×) consumen presupuesto sin retorno. Pausarlos y reinvertir en los ganadores identificados arriba.</p>
+          <span class="tag">Prioridad baja · limpieza</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div id="footer-source">Fuente: Meta Ads (vía Windsor.ai) · Cuenta Herbera Cosmetics® · datos en vivo</div>
+    <div>Elaborado por David González Pizarro — Consultor Ecommerce · davidgonzalezp.com</div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => (
+      { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+    ));
+  }
+
+  // ---- month-over-month delta badges ----
+  const DELTA_MAP = {
+    revenue: "kpi-revenue-delta", spend: "kpi-spend-delta", roas: "kpi-roas-delta", aov: "kpi-aov-delta",
+    clicks: "m-clicks-delta", cpc: "m-cpc-delta", frequency: "m-frequency-delta",
+    visits: "m-visits-delta", costPerVisit: "m-cost-visit-delta", clickToVisit: "m-c2v-delta",
+    carts: "m-carts-delta", costPerCart: "m-cost-cart-delta", clickToCart: "m-c2cart-delta",
+    checkouts: "m-checkouts-delta", costPerCheckout: "m-cost-checkout-delta", clickToCheckout: "m-c2checkout-delta",
+    purchases: "m-purchases-delta", cpa: "m-cpa-delta", clickToPurchase: "m-c2purchase-delta",
+  };
+
+  function renderDelta(id, delta) {
+    const el = $(id);
+    if (!el) return;
+    if (!delta) { el.className = "delta-badge"; el.textContent = ""; return; }
+    const cls = delta.good === true ? "pos" : delta.good === false ? "neg" : "neu";
+    const arrow = delta.dir === "up" ? "▲" : delta.dir === "down" ? "▼" : "→";
+    el.className = `delta-badge ${cls}`;
+    el.textContent = `${arrow} ${delta.text}`;
+  }
+
+  function renderDeltas(deltas) {
+    Object.entries(DELTA_MAP).forEach(([key, id]) => renderDelta(id, deltas ? deltas[key] : null));
+  }
+
+  // ---- automatic "scale / consider pausing" insights ----
+  // Reused for both audience-level and campaign-level diagnosis — `ids` picks
+  // which set of DOM elements to fill (see the two id groups in the HTML).
+  function renderInsights(insights, ids, opts) {
+    opts = opts || {};
+    const scaleList = $(ids.scaleList);
+    const pauseList = $(ids.pauseList);
+    const noun = opts.noun || "audiencia";
+    const nounPlural = opts.nounPlural || "audiencias";
+
+    if ($(ids.scaleSub)) {
+      $(ids.scaleSub).textContent = `Baten la media de la cuenta (CPA medio: ${insights.avgCpa}) con volumen real — inversión mínima de ${insights.minSpend}.`;
+    }
+    if ($(ids.pauseSub)) {
+      $(ids.pauseSub).textContent = `Gasto de al menos ${insights.minSpend} muy por encima del CPA medio (${insights.avgCpa}), o sin ninguna compra.`;
+    }
+
+    scaleList.innerHTML = insights.scale.length
+      ? insights.scale.map((a) => `
+        <div class="insight-item">
+          <div class="iname">${escapeHtml(a.name)}</div>
+          <div class="icamp">${escapeHtml(a.campaign)}</div>
+          <div class="idetail">CPA <strong>${a.cpa}</strong> · ${a.cheaperPct}&nbsp;% más barato que la media · ${a.purchases} compras · ${a.spend} invertidos</div>
+        </div>`).join("")
+      : `<div class="insight-empty">Todavía ninguna ${noun} bate la media de la cuenta con volumen suficiente para confiar en el dato.</div>`;
+
+    pauseList.innerHTML = insights.pause.length
+      ? insights.pause.map((a) => `
+        <div class="insight-item">
+          <div class="iname">${escapeHtml(a.name)}</div>
+          <div class="icamp">${escapeHtml(a.campaign)}</div>
+          <div class="idetail">${a.cpa
+            ? `CPA <strong>${a.cpa}</strong> · ${a.moreExpensivePct}&nbsp;% más caro que la media · ${a.spend} invertidos`
+            : `0 compras con <strong>${a.spend}</strong> invertidos`}</div>
+        </div>`).join("")
+      : `<div class="insight-empty">Sin ${nounPlural} claras a pausar en este periodo.</div>`;
+  }
+
+  const AUDIENCE_INSIGHT_IDS = { scaleList: "insight-scale-list", pauseList: "insight-pause-list", scaleSub: "insight-scale-sub", pauseSub: "insight-pause-sub" };
+  const CAMPAIGN_INSIGHT_IDS = { scaleList: "camp-insight-scale-list", pauseList: "camp-insight-pause-list", scaleSub: "camp-insight-scale-sub", pauseSub: "camp-insight-pause-sub" };
+
+  // ---- ranked leaderboards ----
+  function renderLeaderboardList(id, items) {
+    $(id).innerHTML = items.length
+      ? items.map((it, i) => `
+        <div class="lb-item">
+          <span class="lb-rank">${i + 1}</span>
+          <span class="lb-name">${escapeHtml(it.name)}<span class="lb-camp">${escapeHtml(it.detail)}</span></span>
+          <span class="lb-value num">${it.value}</span>
+        </div>`).join("")
+      : `<div class="insight-empty">Sin datos suficientes todavía.</div>`;
+  }
+
+  function renderLeaderboards(lb) {
+    renderLeaderboardList("lb-cpa", lb.bestCpa);
+    renderLeaderboardList("lb-roas", lb.bestRoas);
+    renderLeaderboardList("lb-aov", lb.bestAov);
+  }
+
+  // ---- monthly trend (3 mini line charts + table) ----
+  function renderTrendChart(svgId, points, valueKey, fmtKey, color) {
+    const el = $(svgId);
+    const vals = points.map((p) => p[valueKey]).filter((v) => v !== null && v !== undefined);
+    if (!vals.length) { el.innerHTML = `<text x="10" y="40" font-size="12" fill="var(--ink-faint)">Sin datos</text>`; return; }
+    const min = Math.min(...vals);
+    const max = Math.max(...vals);
+    const pad = (max - min) * 0.15 || max * 0.15 || 1;
+    const lo = min - pad, hi = max + pad;
+    const w = 280, h = 100, padX = 8, padY = 16;
+    const stepX = (w - padX * 2) / (points.length - 1);
+    const coords = points.map((p, i) => {
+      const v = p[valueKey];
+      const x = padX + i * stepX;
+      const y = v === null || v === undefined ? null : padY + (1 - (v - lo) / (hi - lo || 1)) * (h - padY * 2);
+      return { x, y, p };
+    });
+    const validCoords = coords.filter((c) => c.y !== null);
+    const path = validCoords.map((c, i) => `${i === 0 ? "M" : "L"}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(" ");
+    let svg = `<polyline points="${validCoords.map((c) => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(" ")}" fill="none" stroke="${color}" stroke-width="2"/>`;
+    coords.forEach((c) => {
+      if (c.y === null) return;
+      svg += `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="3.5" fill="${c.p.isProvisional ? "var(--surface)" : color}" stroke="${color}" stroke-width="2"/>`;
+      svg += `<text x="${c.x.toFixed(1)}" y="${h - 2}" font-size="10.5" fill="var(--ink-faint)" text-anchor="middle" font-family="Poppins, sans-serif">${escapeHtml(c.p.label)}${c.p.isProvisional ? "*" : ""}</text>`;
+      svg += `<text x="${c.x.toFixed(1)}" y="${(c.y - 9).toFixed(1)}" font-size="10.5" fill="var(--ink)" text-anchor="middle" font-weight="600" font-family="Poppins, sans-serif">${escapeHtml(c.p[fmtKey])}</text>`;
+    });
+    el.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    el.innerHTML = svg;
+  }
+
+  function renderTrend(trend) {
+    $("trend-grid").innerHTML = `
+      <div class="trend-card"><h4>Coste por clic</h4><svg id="trend-cpc"></svg></div>
+      <div class="trend-card"><h4>Coste por compra (CPA)</h4><svg id="trend-cpa"></svg></div>
+      <div class="trend-card"><h4>ROAS</h4><svg id="trend-roas"></svg></div>`;
+    renderTrendChart("trend-cpc", trend, "cpc", "fmtCpc", "var(--gold)");
+    renderTrendChart("trend-cpa", trend, "cpa", "fmtCpa", "var(--rust)");
+    renderTrendChart("trend-roas", trend, "roas", "fmtRoas", "var(--gold)");
+
+    $("trend-table-body").innerHTML = trend.map((t) => `
+      <tr>
+        <td class="name">${escapeHtml(t.label)}${t.isProvisional ? " *" : ""}</td>
+        <td class="num-col">${t.fmtCpc}</td>
+        <td class="num-col">${t.fmtCpa}</td>
+        <td class="num-col">${t.fmtRoas}</td>
+      </tr>`).join("");
+  }
+
+  // Stage-to-stage conversion analysis: finds where the funnel leaks the most
+  // (the transition with the lowest step-to-step conversion rate).
+  function computeFunnelDiagnosis(t) {
+    const stages = [
+      { label: "Clics", value: t.clicks },
+      { label: "Visitas", value: t.visits },
+      { label: "Carritos", value: t.carts },
+      { label: "Pagos iniciados", value: t.checkouts },
+      { label: "Compras", value: t.purchases },
+    ];
+    const transitions = [];
+    for (let i = 0; i < stages.length - 1; i++) {
+      const from = stages[i];
+      const to = stages[i + 1];
+      const rate = from.value > 0 ? to.value / from.value : 0;
+      transitions.push({ from, to, rate, toIndex: i + 1 });
+    }
+    const valid = transitions.filter((tr) => tr.from.value > 0);
+    const weakest = valid.length ? valid.reduce((a, b) => (b.rate < a.rate ? b : a)) : null;
+    return { stages, transitions, weakest };
+  }
+
+  function renderFunnelDiagnosis(diag) {
+    const el = $("funnel-diagnosis");
+    if (!diag.weakest) { el.classList.remove("show"); el.innerHTML = ""; return; }
+    const w = diag.weakest;
+    const dropPct = ((1 - w.rate) * 100).toFixed(0);
+    const ratePct = (w.rate * 100).toFixed(1);
+    el.classList.add("show");
+    el.innerHTML = `
+      <div class="icon" aria-hidden="true">⚠️</div>
+      <div class="body">
+        <h4>Mayor fuga del embudo: ${escapeHtml(w.from.label)} → ${escapeHtml(w.to.label)}</h4>
+        <p>Aquí se pierde el <strong>${dropPct}&nbsp;%</strong> del volumen (solo convierte un <strong>${ratePct}&nbsp;%</strong>). De ${w.from.value.toLocaleString("es-ES")} en «${escapeHtml(w.from.label)}» llegan ${w.to.value.toLocaleString("es-ES")} a «${escapeHtml(w.to.label)}». Es el punto del embudo donde más se está perdiendo — conviene priorizarlo antes de subir inversión.</p>
+      </div>`;
+  }
+
+  function renderFunnel(t, diag) {
+    const weakIdx = diag && diag.weakest ? diag.weakest.toIndex : -1;
+    const stages = [
+      { label: "CLICS", value: t.clicks, sub: t.fmt.clicks, opacity: 0.95 },
+      { label: "VISITAS", value: t.visits, sub: `${t.fmt.visits} · ${t.fmt.clickToVisit}`, opacity: 0.78 },
+      { label: "CARRITOS", value: t.carts, sub: `${t.fmt.carts} · ${t.fmt.clickToCart}`, opacity: 0.6 },
+      { label: "PAGOS INICIADOS", value: t.checkouts, sub: `${t.fmt.checkouts} · ${t.fmt.clickToCheckout}`, opacity: 0.45 },
+      { label: "COMPRAS", value: t.purchases, sub: `${t.fmt.purchases} · ${t.fmt.clickToPurchase}`, opacity: 1, isFinal: true },
+    ];
+    const maxW = 960;
+    const base = Math.max(1, stages[0].value);
+    const rowH = 42;
+    let svg = "";
+    stages.forEach((s, i) => {
+      const y = 20 + i * rowH;
+      const w = Math.max(s.isFinal ? 20 : 30, (s.value / base) * maxW);
+      const barH = s.isFinal ? 10 : 26;
+      const isWeak = i === weakIdx && !s.isFinal;
+      const fill = s.isFinal ? "var(--rust)" : (isWeak ? "var(--rust)" : "var(--gold)");
+      const insideLabel = w > 170;
+      const labelText = isWeak ? `⚠ ${s.label}` : s.label;
+      svg += `<text x="0" y="${y - 6}" font-size="12" fill="${isWeak ? "var(--rust)" : "var(--ink-soft)"}" font-weight="${isWeak ? "700" : "400"}" font-family="Poppins, sans-serif">${labelText}</text>`;
+      svg += `<rect x="0" y="${y}" width="${w.toFixed(1)}" height="${barH}" fill="${fill}" opacity="${isWeak ? 1 : s.opacity}"/>`;
+      if (insideLabel) {
+        svg += `<text x="${w.toFixed(1)}" y="${y - 6}" font-size="12" fill="var(--ink)" text-anchor="end" font-weight="600">${s.sub}</text>`;
+      } else {
+        svg += `<text x="${(w + 10).toFixed(1)}" y="${(y + barH - 6).toFixed(1)}" font-size="12" fill="${s.isFinal ? "var(--rust)" : "var(--ink)"}" text-anchor="start" font-weight="700">${s.sub}</text>`;
+      }
+    });
+    $("funnel-bars").innerHTML = svg;
+    $("funnel-svg").setAttribute("viewBox", `0 0 1000 ${20 + stages.length * rowH + 10}`);
+  }
+
+  function renderCampaigns(campaigns) {
+    const maxSpend = Math.max(1, ...campaigns.map((c) => c.spend));
+    const maxRev = Math.max(1, ...campaigns.map((c) => c.revenue));
+    $("camp-chart").innerHTML = campaigns.map((c) => `
+      <div class="camp-row">
+        <div><div class="cname">${escapeHtml(c.name)}</div><div class="cobj">${escapeHtml(c.objective)}</div></div>
+        <div class="camp-bars">
+          <div class="bar-track"><div class="bar-fill spend" style="width:${((100 * c.spend) / maxSpend).toFixed(1)}%"></div></div>
+          <div class="bar-track"><div class="bar-fill rev" style="width:${((100 * c.revenue) / maxRev).toFixed(1)}%"></div></div>
+        </div>
+        <div class="camp-roas"><div class="v num${c.roas === 0 ? " zero" : ""}">${c.fmt.roas}</div><div class="l">ROAS</div></div>
+      </div>`).join("");
+
+    $("camp-table-body").innerHTML = campaigns.map((c) => `
+      <tr>
+        <td class="name">${escapeHtml(c.name)}</td>
+        <td class="num-col">${c.fmt.spend}</td>
+        <td class="num-col">${c.fmt.revenue}</td>
+        <td class="num-col">${c.fmt.purchases}</td>
+        <td class="num-col">${c.purchases > 0 ? c.fmt.cpa : "—"}</td>
+        <td class="num-col">${c.purchases > 0 ? c.fmt.aov : "—"}</td>
+        <td class="num-col">${c.fmt.ctr}</td>
+      </tr>`).join("");
+
+    const top = campaigns[0];
+    $("campaigns-note").textContent = campaigns.length
+      ? `${campaigns.length} campaña${campaigns.length === 1 ? "" : "s"} activa${campaigns.length === 1 ? "" : "s"}. ${escapeHtml(top.name)} concentra el ${((100 * top.spend) / campaigns.reduce((s, c) => s + c.spend, 0)).toFixed(0)} % del presupuesto.`
+      : "Sin campañas con inversión en este periodo.";
+  }
+
+  function renderAudiences(audiences) {
+    $("aud-table-body").innerHTML = audiences.map((a) => `
+      <tr>
+        <td class="name">${escapeHtml(a.name)}<span class="sub">${escapeHtml(a.campaign)}</span></td>
+        <td class="num-col">${a.fmt.spend}</td>
+        <td class="num-col">${a.fmt.purchases}</td>
+        <td class="num-col">${a.fmt.revenue}</td>
+        <td class="num-col"><span class="badge ${a.roas >= 1 ? "win" : "warn"}">${a.fmt.roas}</span></td>
+        <td class="num-col">${a.purchases > 0 ? a.fmt.cpa : "—"}</td>
+      </tr>`).join("") || `<tr><td colspan="6" style="color:var(--ink-faint)">Todavía no hay suficiente inversión por audiencia en este periodo.</td></tr>`;
+  }
+
+  function renderAds(ads) {
+    const top4 = ads.slice(0, 4);
+    $("ads-grid").innerHTML = top4.map((a, i) => `
+      <div class="ad-card">
+        <div class="athumb-wrap">${a.image ? `<img class="athumb" src="${escapeHtml(a.image)}" alt="Creatividad del anuncio ${escapeHtml(a.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : ""}</div>
+        <div class="rank">N.º ${i + 1}</div>
+        <div class="aname">${escapeHtml(a.name)}</div>
+        <div class="aset">${escapeHtml(a.adset)} · ${escapeHtml(a.campaign)}</div>
+        <div class="amet">
+          <div class="row"><span class="k">Compras</span><span class="v hi num">${a.fmt.purchases}</span></div>
+          <div class="row"><span class="k">Facturación</span><span class="v num">${a.fmt.revenue}</span></div>
+          <div class="row"><span class="k">ROAS</span><span class="v num">${a.fmt.roas}</span></div>
+          <div class="row"><span class="k">Inversión</span><span class="v num">${a.fmt.spend}</span></div>
+        </div>
+      </div>`).join("") || `<div class="load-note">Todavía no se ha testeado ningún anuncio en este periodo.</div>`;
+
+    const top10 = ads.slice(0, 10);
+    $("ads-mini-grid").innerHTML = top10.map((a, i) => `
+      <div class="ad-mini-card">
+        <div class="mthumb-wrap">${a.image ? `<img class="mthumb" src="${escapeHtml(a.image)}" alt="Creatividad del anuncio ${escapeHtml(a.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : ""}</div>
+        <div class="mrank">N.º ${i + 1}</div>
+        <div class="mname">${escapeHtml(a.name)}</div>
+        <div class="mmet"><span>Compras</span><span class="v num">${a.fmt.purchases}</span></div>
+        <div class="mmet"><span>Factur.</span><span class="v num">${a.fmt.revenue}</span></div>
+      </div>`).join("") || `<div class="load-note">Todavía no se ha testeado ningún anuncio en este periodo.</div>`;
+
+    $("ads-table-body").innerHTML = ads.map((a, i) => `
+      <tr>
+        <td class="cname-cell">
+          ${i < 10 && a.image
+            ? `<img class="cthumb" src="${escapeHtml(a.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
+            : `<div class="cthumb-empty"></div>`}
+          <div>
+            <div class="cname">${escapeHtml(a.name)}</div>
+            <div class="cset">${escapeHtml(a.adset)} · ${escapeHtml(a.campaign)}</div>
+          </div>
+        </td>
+        <td class="num-col">${a.fmt.purchases}</td>
+        <td class="num-col">${a.fmt.revenue}</td>
+        <td class="num-col"><span class="badge ${a.roas >= 1 ? "win" : "warn"}">${a.fmt.roas}</span></td>
+        <td class="num-col">${a.fmt.ctr}</td>
+        <td class="num-col">${a.fmt.visits}</td>
+        <td class="num-col">${a.fmt.carts}</td>
+        <td class="num-col">${a.fmt.checkouts}</td>
+        <td class="num-col">${a.fmt.frequency}</td>
+        <td class="num-col">${a.fmt.cpm}</td>
+        <td class="num-col">${a.fmt.spend}</td>
+      </tr>`).join("") || `<tr><td colspan="11" style="color:var(--ink-faint)">Todavía no se ha testeado ningún anuncio en este periodo.</td></tr>`;
+
+    $("ads-table-note").textContent = `${ads.length} creatividad${ads.length === 1 ? "" : "es"} con inversión registrada · ordenado por compras y facturación.`;
+  }
+
+  let currentPeriod = "current";
+
+  async function loadDashboard(period) {
+    if (period) currentPeriod = period;
+    $("period-current").classList.toggle("active", currentPeriod === "current");
+    $("period-last-complete").classList.toggle("active", currentPeriod === "last_complete");
+    try {
+      const res = await fetch(`/.netlify/functions/meta-ads?period=${encodeURIComponent(currentPeriod)}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+      const t = data.totals;
+      $("m-frequency").textContent = t.fmt.frequency;
+      $("kpi-revenue").textContent = t.fmt.revenue;
+      $("kpi-spend").textContent = t.fmt.spend;
+      $("kpi-roas").textContent = t.fmt.roas;
+      $("kpi-aov").textContent = t.purchases > 0 ? t.fmt.aov : "—";
+
+      $("m-clicks").textContent = t.fmt.clicks;
+      $("m-cpc").textContent = t.fmt.cpc;
+      $("m-visits").textContent = t.fmt.visits;
+      $("m-cost-visit").textContent = t.fmt.costPerVisit;
+      $("m-c2v").textContent = t.fmt.clickToVisit;
+      $("m-carts").textContent = t.fmt.carts;
+      $("m-cost-cart").textContent = t.fmt.costPerCart;
+      $("m-c2cart").textContent = t.fmt.clickToCart;
+      $("m-checkouts").textContent = t.fmt.checkouts;
+      $("m-cost-checkout").textContent = t.fmt.costPerCheckout;
+      $("m-c2checkout").textContent = t.fmt.clickToCheckout;
+      $("m-purchases").textContent = t.fmt.purchases;
+      $("m-cpa").textContent = t.purchases > 0 ? t.fmt.cpa : "—";
+      $("m-c2purchase").textContent = t.fmt.clickToPurchase;
+
+      renderDeltas(t.deltas);
+      if (!(t.purchases > 0)) { renderDelta("kpi-aov-delta", null); renderDelta("m-cpa-delta", null); }
+
+      const note = $("partial-note");
+      if (data.meta.prevMonthLabel && data.meta.dayOfMonth && data.meta.daysInMonth) {
+        note.hidden = false;
+        note.textContent = `Los cambios frente a ${data.meta.prevMonthLabel} son orientativos: este mes va por el día ${data.meta.dayOfMonth} de ${data.meta.daysInMonth}, comparado contra ${data.meta.prevMonthLabel} completo.`;
+      } else {
+        note.hidden = true;
+      }
+
+      $("funnel-note").textContent = `${t.fmt.clicks} clics generaron ${t.fmt.purchases} compras — conversión global de clic a compra del ${t.fmt.clickToPurchase}.`;
+      const diag = computeFunnelDiagnosis(t);
+      renderFunnel(t, diag);
+      renderFunnelDiagnosis(diag);
+      renderInsights(data.insights, AUDIENCE_INSIGHT_IDS, { noun: "audiencia", nounPlural: "audiencias" });
+      renderInsights(data.campaignInsights, CAMPAIGN_INSIGHT_IDS, { noun: "campaña", nounPlural: "campañas" });
+      $("insights-note").textContent = `Generado a partir de los datos de este periodo · inversión mínima de ${data.thresholds.audienceMinSpend}.`;
+      renderTrend(data.trend);
+      renderCampaigns(data.campaigns);
+      renderLeaderboards(data.leaderboards);
+      $("leaderboard-note").textContent = `Inversión mínima de ${data.thresholds.audienceMinSpend} para entrar en los rankings.`;
+      $("audiences-note").textContent = `Ordenado por ROAS · inversión mínima de ${data.thresholds.audienceMinSpend}.`;
+      renderAudiences(data.audiences);
+      renderAds(data.ads);
+      $("ads-note").textContent = "Ordenado por compras y facturación.";
+
+      const periodLabel = currentPeriod === "last_complete" ? `${data.meta.range.date_from} a ${data.meta.range.date_to} (mes anterior completo)` : "mes en curso";
+      const updated = new Date(data.meta.generatedAt);
+      $("last-updated").textContent = updated.toLocaleString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+      $("footer-source").textContent = `Fuente: Meta Ads (vía Windsor.ai) · Cuenta ${data.meta.account} · datos en vivo, ${periodLabel}`;
+    } catch (err) {
+      $("last-updated").textContent = "error al cargar";
+      $("funnel-note").innerHTML = `<span class="err-note">No se han podido cargar los datos en vivo (${escapeHtml(err.message)}). Reintenta recargando la página.</span>`;
+      $("campaigns-note").textContent = "";
+    }
+  }
+
+  $("period-current").addEventListener("click", () => loadDashboard("current"));
+  $("period-last-complete").addEventListener("click", () => loadDashboard("last_complete"));
+
+  loadDashboard();
+  // Keep the dashboard fresh while the tab stays open.
+  setInterval(() => loadDashboard(), 5 * 60 * 1000);
+})();
+</script>
+</body>
+</html>
