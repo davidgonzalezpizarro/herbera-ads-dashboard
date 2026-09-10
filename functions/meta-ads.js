@@ -303,7 +303,6 @@ exports.handler = async (event) => {
     const allAudiences = adsetRows.map((r) => ({ name: r.adset_name, campaign: r.campaign, ...deriveTotals(r) }));
 
     const AUDIENCE_MIN_SPEND = 60;
-    const ADS_MIN_SPEND = 50;
     const CAMPAIGN_MIN_SPEND = 100;
 
     const audiences = allAudiences
@@ -319,9 +318,8 @@ exports.handler = async (event) => {
         image: r.thumbnail_url || null,
         ...deriveTotals(r),
       }))
-      .filter((a) => a.spend >= ADS_MIN_SPEND)
-      .sort((a, b) => b.revenue - a.revenue)
-      .slice(0, 4);
+      .filter((a) => a.spend > 0)
+      .sort((a, b) => (b.purchases - a.purchases) || (b.revenue - a.revenue));
 
     const mapFmt = (arr) => arr.map((it) => ({ ...it, fmt: fmt(it) }));
 
